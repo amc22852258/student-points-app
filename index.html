@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#276b4d" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="獎懲點數" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="description" content="手機使用的安親班學生獎勵與懲罰點數登錄工具。" />
+    <title>安親班獎懲點數</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icons/icon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="top-bar">
+        <div>
+          <p class="eyebrow">Student Points</p>
+          <h1>安親班獎懲點數</h1>
+        </div>
+        <button class="icon-btn" id="exportBtn" type="button" title="匯出紀錄" aria-label="匯出紀錄">↓</button>
+      </header>
+
+      <section class="summary-strip" aria-label="今日統計">
+        <article>
+          <span>今日獎勵</span>
+          <strong id="todayReward">0</strong>
+        </article>
+        <article>
+          <span>今日懲罰</span>
+          <strong id="todayPenalty">0</strong>
+        </article>
+        <article>
+          <span>本月淨分</span>
+          <strong id="monthNet">0</strong>
+        </article>
+      </section>
+
+      <section class="entry-panel" aria-label="登錄點數">
+        <div class="field-row">
+          <label for="classSelect">班級</label>
+          <select id="classSelect"></select>
+        </div>
+
+        <form id="classForm" class="add-student">
+          <input id="className" type="text" autocomplete="off" placeholder="新增班級名稱" />
+          <button type="submit">新增</button>
+        </form>
+
+        <div class="field-row">
+          <label for="studentSelect">學生</label>
+          <select id="studentSelect"></select>
+        </div>
+
+        <form id="studentForm" class="add-student">
+          <input id="studentName" type="text" autocomplete="off" placeholder="新增學生姓名" />
+          <button type="submit">新增</button>
+        </form>
+
+        <div class="mode-tabs" role="group" aria-label="點數類型">
+          <button class="is-active" id="rewardMode" type="button" data-mode="reward">獎勵</button>
+          <button id="penaltyMode" type="button" data-mode="penalty">懲罰</button>
+        </div>
+
+        <div class="point-stepper" aria-label="點數">
+          <button id="minusPoint" type="button" aria-label="減少點數">−</button>
+          <output id="pointValue">1</output>
+          <button id="plusPoint" type="button" aria-label="增加點數">+</button>
+        </div>
+
+        <div class="quick-reasons" id="quickReasons" aria-label="快速原因"></div>
+
+        <label class="note-field" for="reasonInput">
+          <span>原因</span>
+          <textarea id="reasonInput" rows="3" placeholder="例如：主動訂正、吵鬧提醒三次"></textarea>
+        </label>
+
+        <button class="primary-btn" id="saveEntry" type="button">登錄點數</button>
+      </section>
+
+      <section class="student-board" aria-label="學生點數排行">
+        <div class="section-heading">
+          <h2>學生總覽</h2>
+          <button class="text-btn" id="clearAllBtn" type="button">清除全部</button>
+        </div>
+        <div id="studentList" class="student-list"></div>
+      </section>
+
+      <section class="history-panel" aria-label="近期紀錄">
+        <div class="section-heading">
+          <h2>近期紀錄</h2>
+          <button class="text-btn" id="undoBtn" type="button">復原上一筆</button>
+        </div>
+        <div id="historyList" class="history-list"></div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="./script.js"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("./service-worker.js");
+        });
+      }
+    </script>
+  </body>
+</html>
